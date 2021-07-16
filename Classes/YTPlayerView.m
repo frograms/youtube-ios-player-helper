@@ -904,7 +904,6 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
 - (void)setWebView:(WKWebView *)webView {
   _webView = webView;
 }
-
 - (WKWebView *)createNewWebView {
   WKWebViewConfiguration *webViewConfiguration = [[WKWebViewConfiguration alloc] init];
   webViewConfiguration.allowsInlineMediaPlayback = NO;
