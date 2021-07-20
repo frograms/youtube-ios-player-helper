@@ -652,7 +652,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
       [ytRegex firstMatchInString:url.absoluteString
                         options:0
                           range:NSMakeRange(0, [url.absoluteString length])];
-    
+
   NSRegularExpression *adRegex =
       [NSRegularExpression regularExpressionWithPattern:kYTPlayerAdUrlRegexPattern
                                                 options:NSRegularExpressionCaseInsensitive
@@ -661,7 +661,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
       [adRegex firstMatchInString:url.absoluteString
                         options:0
                           range:NSMakeRange(0, [url.absoluteString length])];
-    
+
   NSRegularExpression *syndicationRegex =
       [NSRegularExpression regularExpressionWithPattern:kYTPlayerSyndicationRegexPattern
                                                 options:NSRegularExpressionCaseInsensitive
@@ -680,7 +680,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
     [oauthRegex firstMatchInString:url.absoluteString
                            options:0
                              range:NSMakeRange(0, [url.absoluteString length])];
-    
+
   NSRegularExpression *staticProxyRegex =
     [NSRegularExpression regularExpressionWithPattern:kYTPlayerStaticProxyRegexPattern
                                               options:NSRegularExpressionCaseInsensitive
@@ -728,7 +728,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
   }
 
   [playerParams setValue:playerCallbacks forKey:@"events"];
-  
+
   NSMutableDictionary *playerVars = [[playerParams objectForKey:@"playerVars"] mutableCopy];
   if (!playerVars) {
     // playerVars must not be empty so we can render a '{}' in the output JSON
@@ -741,16 +741,15 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
 
   // Remove the existing webview to reset any state
   [self.webView removeFromSuperview];
-//    playerVars objectForKey:"abd"
-
-  _webView = [self createNewWebView];
+  NSInteger isInline = [[playerVars objectForKey:@"playsinline"] integerValue];
+  _webView = [self createNewWebView:isInline == 1];
   [self addSubview:self.webView];
 
   NSError *error = nil;
   NSString *path = [[NSBundle bundleForClass:[YTPlayerView class]] pathForResource:@"YTPlayerView-iframe-player"
                                                    ofType:@"html"
                                               inDirectory:@"Assets"];
-    
+
   // in case of using Swift and embedded frameworks, resources included not in main bundle,
   // but in framework bundle
   if (!path) {
@@ -758,7 +757,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
                                                      ofType:@"html"
                                                 inDirectory:@"Assets"];
   }
-    
+
   NSString *embedHTMLTemplate =
       [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&error];
 
@@ -797,7 +796,7 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
       self.initialLoadingView = initialLoadingView;
     }
   }
-  
+
   return YES;
 }
 
@@ -906,9 +905,10 @@ createWebViewWithConfiguration:(WKWebViewConfiguration *)configuration
 - (void)setWebView:(WKWebView *)webView {
   _webView = webView;
 }
-- (WKWebView *)createNewWebView {
+
+- (WKWebView *)createNewWebView:(BOOL)isInline {
   WKWebViewConfiguration *webViewConfiguration = [[WKWebViewConfiguration alloc] init];
-  webViewConfiguration.allowsInlineMediaPlayback = NO;
+    webViewConfiguration.allowsInlineMediaPlayback = isInline ? YES : NO;
   webViewConfiguration.mediaTypesRequiringUserActionForPlayback = WKAudiovisualMediaTypeNone;
   WKWebView *webView = [[WKWebView alloc] initWithFrame:self.bounds
                                           configuration:webViewConfiguration];
