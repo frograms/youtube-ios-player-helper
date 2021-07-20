@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name              = "forked-youtube-ios-player-helper"
-  s.version           = "1.0.5"
+  s.version           = "1.0.6"
   s.summary           = "Helper library for iOS developers that want to embed YouTube videos in
                          their iOS apps with the iframe player API."
 
