@@ -41,7 +41,7 @@ Pod::Spec.new do |s|
                            "Ibrahim Ulukaya" => "ulukaya@google.com",
                            "Yoshifumi Yamaguchi" => "yoshifumi@google.com" }
   s.social_media_url   = "https://twitter.com/YouTubeDev"
-  s.source             = { :git => "https://github.com/frograms/youtube-ios-player-helper.git", :tag => "1.0.8" }
+  s.source             = { :git => "git@github.com:frograms/youtube-ios-player-helper.git", :tag => "1.0.8" }
 
   s.platform     = :ios, '10.0'
   s.requires_arc = true
